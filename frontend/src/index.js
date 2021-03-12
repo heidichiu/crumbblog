@@ -3,10 +3,15 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import UserSignupPage from "./pages/UserSignupPage";
 import reportWebVitals from "./reportWebVitals";
+import * as apiCalls from "./api/apiCalls";
+
+const actions = {
+  postSignup: apiCalls.signup,
+};
 
 ReactDOM.render(
   <React.StrictMode>
-    <UserSignupPage />
+    <UserSignupPage actions={actions} />
   </React.StrictMode>,
   document.getElementById("root")
 );
