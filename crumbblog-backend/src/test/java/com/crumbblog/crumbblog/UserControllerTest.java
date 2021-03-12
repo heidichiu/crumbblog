@@ -1,5 +1,6 @@
 package com.crumbblog.crumbblog;
 
+import com.crumbblog.crumbblog.error.ApiError;
 import com.crumbblog.crumbblog.shared.GenericResponse;
 import com.crumbblog.crumbblog.user.User;
 import com.crumbblog.crumbblog.user.UserRepository;
@@ -170,6 +171,20 @@ public class UserControllerTest {
         user.setPassword("12345678");
         ResponseEntity<Object> response = postSignup(user, Object.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    }
+
+    @Test
+    public void postUser_whenUserIsInvalid_receiveApiError() {
+        User user = new User();
+        ResponseEntity<ApiError> response = postSignup(user, ApiError.class);
+        assertThat(response.getBody().getUrl()).isEqualTo(API_1_0_USERS);
+    }
+
+    @Test
+    public void postUser_whenUserIsInvalid_receiveApiErrorWithValidationErrors() {
+        User user = new User();
+        ResponseEntity<ApiError> response = postSignup(user, ApiError.class);
+        assertThat(response.getBody().getValidationErrors().size()).isEqualTo(3);
     }
 
     public <T> ResponseEntity<T> postSignup(Object request, Class<T> response) {
